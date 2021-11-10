@@ -7,18 +7,19 @@ import * as NodeRSA from "node-rsa"
 require('dotenv').config()
 
 function handleSubmit(event) {
+   console.log("My Public Key:",process.env.REACT_APP_PUBLIC_KEY)
   event.preventDefault();
   console.log(event.target.password.value); 
   const message=event.target.password.value;
-  console.log("My Public Key:",process.env.REACT_APP_PUBLIC_KEY)
   var key = new NodeRSA();
-key.setOptions({
+  console.log("ENV VAR",process.env)
+ key.setOptions({
   encryptionScheme: "pkcs1",
-});
+ });
 key.importKey(process.env.REACT_APP_PUBLIC_KEY, "pkcs8-public");
 const encrypted = key.encrypt(message, "base64");
 console.log("Encrypted: ", encrypted);
-console.log("ENV VAR",process.env)
+
 
 }
 
