@@ -2,9 +2,9 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      - public_key=$(aws secretsmanager get-secret-value --secret-id 'test_rsa_poc_password_key_pair' | jq -r '.SecretString' | jq -r '.public_key')
+      - public_key=$(aws secretsmanager get-secret-value --secret-id $ENCRYPTION_SECRET_NAME | jq -r '.SecretString' | jq -r .$PUBLIC_KEY_SECRET)
       - echo "REACT_APP_PUBLIC_KEY = "$public_key >> .env
-      - public_key_version=$(aws secretsmanager list-secret-version-ids --secret-id 'test_rsa_poc_password_key_pair'  | jq -r '.Versions[0] .VersionId')
+      - public_key_version=$(aws secretsmanager list-secret-version-ids --secret-id $ENCRYPTION_SECRET_NAME  | jq -r '.Versions[0] .VersionId')
       - echo "REACT_APP_PUBLIC_KEY_VERSION = "$public_key_version >> .env
       - cat .env
       - echo checking code quality...
