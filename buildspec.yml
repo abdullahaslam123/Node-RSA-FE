@@ -3,7 +3,9 @@ phases:
   pre_build:
     commands:
       - public_key=$(aws secretsmanager get-secret-value --secret-id 'rsa_poc_password_key_pair' | jq -r '.SecretString' | jq -r '.public_key')
-      - echo "REACT_APP_PUBLIC_KEY = "$public_key > .env
+      - echo "REACT_APP_PUBLIC_KEY = "$public_key >> .env
+      - public_key_version=$(aws secretsmanager list-secret-version-ids --secret-id | jq -r '.Versions[0] .VersionId')
+      - echo "REACT_APP_PUBLIC_KEY_VERSION = "$public_key_version >> .env
       - cat .env
       - echo checking code quality...
       - npm install --verbose
@@ -16,4 +18,3 @@ phases:
       # copy the contents of /build to S3 bucket
       - aws s3 sync build s3://$DEPLOYMENT_BUCKET/ --delete --exclude 'index.html' --acl public-read --cache-control 'max-age=860000'
       - aws s3 sync build s3://$DEPLOYMENT_BUCKET/ --delete --exclude '*' --include 'index.html' --acl public-read --cache-control 'max-age=0'
-      
