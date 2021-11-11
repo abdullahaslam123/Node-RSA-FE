@@ -4,12 +4,11 @@ phases:
     commands:
       - public_key=$(aws secretsmanager get-secret-value --secret-id $ENCRYPTION_SECRET_NAME | jq -r '.SecretString' | jq -r .$PUBLIC_KEY_SECRET)
       - echo "REACT_APP_PUBLIC_KEY = "$public_key >> .env
-      - current_key=$(aws secretsmanager list-secret-version-ids --secret-id $ENCRYPTION_SECRET_NAME | jq '.Versions' |jq -c '.[] | select(.VersionStages | contains(["AWSCURRENT"]))' | jq -r '.VersionId')
+      - public_key_version=$(aws secretsmanager list-secret-version-ids --secret-id $ENCRYPTION_SECRET_NAME | jq '.Versions' |jq -c '.[] | select(.VersionStages | contains(["AWSCURRENT"]))' | jq -r '.VersionId')
       # checking for filtered key, if filtered extract version id
-      - echo $current_key
+      - echo $public_key_version
       # extracting version id
-      # - public_key_version = current_key | jq -r '.VersionId'
-      #- echo "REACT_APP_PUBLIC_KEY_VERSION = "$public_key_version >> .env
+      - echo "REACT_APP_PUBLIC_KEY_VERSION = "$public_key_version >> .env
       - cat .env
       - echo checking code quality...
       # - npm install --verbose
