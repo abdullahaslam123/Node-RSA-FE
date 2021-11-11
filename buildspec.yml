@@ -6,7 +6,7 @@ phases:
       - echo "REACT_APP_PUBLIC_KEY = "$public_key >> .env
       - current_key=$(aws secretsmanager list-secret-version-ids --secret-id $ENCRYPTION_SECRET_NAME | jq '.Versions')
       # checking for filtered key, if filtered extract version id
-      - echo current_key
+      - echo $current_key
       # extracting version id
       # - public_key_version = current_key | jq -r '.VersionId'
       #- echo "REACT_APP_PUBLIC_KEY_VERSION = "$public_key_version >> .env
