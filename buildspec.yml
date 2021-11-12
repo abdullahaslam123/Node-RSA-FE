@@ -3,7 +3,7 @@ phases:
   pre_build:
     commands:
       - public_key=$(aws secretsmanager get-secret-value --secret-id $ENCRYPTION_SECRET_NAME | jq -r '.SecretString' | jq -r .$PUBLIC_KEY_SECRET)
-      - echo "REACT_APP_PUBLIC_KEY = "$public_key >> .env
+      - echo "REACT_APP_PUBLIC_KEY = ""$public_key" >> .env
       - public_key_version=$(aws secretsmanager list-secret-version-ids --secret-id $ENCRYPTION_SECRET_NAME | jq '.Versions' |jq -c '.[] | select(.VersionStages | contains(["AWSCURRENT"]))' | jq -r '.VersionId')
       # checking for filtered key, if filtered extract version id
       - echo $public_key_version
@@ -11,13 +11,13 @@ phases:
       - echo "REACT_APP_PUBLIC_KEY_VERSION = "$public_key_version >> .env
       - cat .env
       - echo checking code quality...
-      - npm install --verbose
+      # - npm install --verbose
   build:
     commands:
       - echo creating builddd...
-      - npm run build
+      # - npm run build
   post_build:
     commands:
       # copy the contents of /build to S3 bucket
-      - aws s3 sync build s3://$DEPLOYMENT_BUCKET/ --delete --exclude 'index.html' --acl public-read --cache-control 'max-age=860000'
-      - aws s3 sync build s3://$DEPLOYMENT_BUCKET/ --delete --exclude '*' --include 'index.html' --acl public-read --cache-control 'max-age=0'
+      # - aws s3 sync build s3://$DEPLOYMENT_BUCKET/ --delete --exclude 'index.html' --acl public-read --cache-control 'max-age=860000'
+      # - aws s3 sync build s3://$DEPLOYMENT_BUCKET/ --delete --exclude '*' --include 'index.html' --acl public-read --cache-control 'max-age=0'
