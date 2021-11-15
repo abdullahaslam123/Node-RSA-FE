@@ -3,7 +3,7 @@ phases:
   pre_build:
     commands:
       - public_key=$(aws secretsmanager get-secret-value --secret-id $ENCRYPTION_SECRET_NAME | jq -r '.SecretString' | jq -r .$PUBLIC_KEY_SECRET)
-      - echo "REACT_APP_PUBLIC_KEY = "$public_key >> .env
+      - echo "REACT_APP_PUBLIC_KEY = \"$public_key\"" >> .env
       - public_key_version=$(aws secretsmanager list-secret-version-ids --secret-id $ENCRYPTION_SECRET_NAME | jq '.Versions' |jq -c '.[] | select(.VersionStages | contains(["AWSCURRENT"]))' | jq -r '.VersionId')
       # checking for filtered key, if filtered extract version id
       - echo $public_key_version
