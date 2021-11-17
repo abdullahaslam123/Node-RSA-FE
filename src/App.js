@@ -20,15 +20,15 @@ key.importKey(process.env.REACT_APP_PUBLIC_KEY, "pkcs8-public");
 const encrypted = key.encrypt(message, "base64");
 console.log("Encrypted: ", encrypted);
 
-var key2 = new NodeRSA();
+// var key2 = new NodeRSA();
 
-  key2.setOptions({
-    encryptionScheme: "pkcs1",
-  });
+//   key2.setOptions({
+//     encryptionScheme: "pkcs1",
+//   });
 
-  key2.importKey(process.env.REACT_APP_PRIVATE_KEY);
-  const decrypted = key2.decrypt(encrypted, "utf8");
-  console.log("Decrypted: ", decrypted);
+//   key2.importKey(process.env.REACT_APP_PRIVATE_KEY);
+//   const decrypted = key2.decrypt(encrypted, "utf8");
+//   console.log("Decrypted: ", decrypted);
 
 
 }
