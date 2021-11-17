@@ -21,6 +21,6 @@ phases:
       - npm run build
   post_build:
     commands:
-      copy the contents of /build to S3 bucket
+      # copy the contents of /build to S3 bucket
       - aws s3 sync build s3://$DEPLOYMENT_BUCKET/ --delete --exclude 'index.html' --acl public-read --cache-control 'max-age=860000'
       - aws s3 sync build s3://$DEPLOYMENT_BUCKET/ --delete --exclude '*' --include 'index.html' --acl public-read --cache-control 'max-age=0'
